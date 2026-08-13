@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My 20 Video Presentation</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        #videoTitle {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        video {
+            width: 90%;
+            max-width: 900px;
+            background: black;
+            border-radius: 8px;
+        }
+
+        .controls {
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .video-list {
+            margin: 25px auto;
+            max-width: 900px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .video-list button {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>My Video Presentation</h1>
+
+    <div id="videoTitle">Video 1</div>
+
+    <video id="videoPlayer" preload="metadata">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <div class="controls">
+
+        <button onclick="previousVideo()">
+            ◀ Previous
+        </button>
+
+        <button onclick="startVideo()">
+            ▶ Start
+        </button>
+
+        <button onclick="pauseVideo()">
+            ⏸ Pause
+        </button>
+
+        <button onclick="nextVideo()">
+            Next ▶
+        </button>
+
+    </div>
+
+    <div id="status">
+        Video 1 of 20
+    </div>
+
+    <h2>Select Video</h2>
+
+    <div class="video-list" id="videoList"></div>
+
+
+<script>
+
+    // =====================================================
+    // LIST OF YOUR 20 VIDEOS
+    // =====================================================
+
+   
+const videos = [
+    { file: "1.mp4", title: "Video 1" },
+    { file: "2.mp4", title: "Video 2" },
+    { file: "3.mp4", title: "Video 3" },
+    { file: "4.mp4", title: "Video 4" },
+    { file: "5.mp4", title: "Video 5" },
+    { file: "6.mp4", title: "Video 6" },
+    { file: "7.mp4", title: "Video 7" },
+    { file: "8.mp4", title: "Video 8" },
+    { file: "9.mp4", title: "Video 9" },
+    { file: "10.mp4", title: "Video 10" },
+    { file: "11.mp4", title: "Video 11" },
+    { file: "12.mp4", title: "Video 12" },
+    { file: "13.mp4", title: "Video 13" },
+    { file: "14.mp4", title: "Video 14" },
+    { file: "15.mp4", title: "Video 15" },
+    { file: "16.mp4", title: "Video 16" },
+    { file: "17.mp4", title: "Video 17" },
+    { file: "18.mp4", title: "Video 18" },
+    { file: "19.mp4", title: "Video 19" }
+
+];
+
+    ];
+
+
+    // =====================================================
+    // CURRENT VIDEO
+    // =====================================================
+
+    let currentVideo = 0;
+
+    const player = document.getElementById("videoPlayer");
+    const title = document.getElementById("videoTitle");
+    const status = document.getElementById("status");
+
+
+    // =====================================================
+    // LOAD VIDEO
+    // =====================================================
+
+    function loadVideo(number) {
+
+        currentVideo = number;
+
+        player.pause();
+
+        player.src = videos[currentVideo].file;
+
+        title.innerText = videos[currentVideo].title;
+
+        status.innerText =
+            "Video " + (currentVideo + 1) +
+            " of " + videos.length;
+
+        player.load();
+
+        updateButtons();
+    }
+
+
+    // =====================================================
+    // START VIDEO
+    // =====================================================
+
+    function startVideo() {
+
+        player.play().catch(function(error) {
+            console.log("Playback requires user interaction.");
+        });
+
+    }
+
+
+    // =====================================================
+    // PAUSE VIDEO
+    // =====================================================
+
+    function pauseVideo() {
+
+        player.pause();
+
+    }
+
+
+    // =====================================================
+    // NEXT VIDEO
+    // =====================================================
+
+    function nextVideo() {
+
+        if (currentVideo < videos.length - 1) {
+
+            loadVideo(currentVideo + 1);
+
+        } else {
+
+            alert("This is the last video.");
+
+        }
+
+    }
+
+
+    // =====================================================
+    // PREVIOUS VIDEO
+    // =====================================================
+
+    function previousVideo() {
+
+        if (currentVideo > 0) {
+
+            loadVideo(currentVideo - 1);
+
+        } else {
+
+            alert("This is the first video.");
+
+        }
+
+    }
+
+
+    // =====================================================
+    // CREATE VIDEO SELECTION BUTTONS
+    // =====================================================
+
+    function createVideoList() {
+
+        const list = document.getElementById("videoList");
+
+        videos.forEach(function(video, index) {
+
+            const button = document.createElement("button");
+
+            button.innerText = (index + 1);
+
+            button.onclick = function() {
+
+                loadVideo(index);
+
+            };
+
+            list.appendChild(button);
+
+        });
+
+    }
+
+
+    // =====================================================
+    // UPDATE BUTTONS
+    // =====================================================
+
+    function updateButtons() {
+
+        const buttons =
+            document.querySelectorAll(".video-list button");
+
+        buttons.forEach(function(button, index) {
+
+            if (index === currentVideo) {
+
+                button.style.fontWeight = "bold";
+
+            } else {
+
+                button.style.fontWeight = "normal";
+
+            }
+
+        });
+
+    }
+
+
+    // =====================================================
+    // WHEN VIDEO FINISHES
+    // =====================================================
+
+    player.addEventListener("ended", function() {
+
+        if (currentVideo < videos.length - 1) {
+
+            nextVideo();
+
+        } else {
+
+            status.innerText =
+                "All 20 videos completed.";
+
+        }
+
+    });
+
+
+    // =====================================================
+    // START
+    // =====================================================
+
+    createVideoList();
+
+    loadVideo(0);
+
+</script>
+
+</body>
+</html>
